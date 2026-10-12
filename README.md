@@ -21,14 +21,15 @@ If the phone can't connect (office Wi-Fi often blocks it), stop with Ctrl+C and 
 
 Next time you only need step 4 and `npx expo start`.
 
-## Get a real installable APK (when you're happy with it)
+## Install the APK
 
-```
-npx eas-cli@latest login
-npx eas-cli@latest build -p android --profile preview
-```
+Open https://github.com/Nagamani-P/daily-tasks/releases/latest on your phone, tap the `.apk` file, and allow "Install unknown apps" for your browser if Android asks.
 
-This builds in Expo's cloud (free account) and gives you a download link for the APK. Install it on your phone and it works without the PC or Expo Go. Daily reminders are most reliable in the APK version.
+Every push to `main` builds a new APK on GitHub (Actions tab) and replaces the file on that page. Installing a newer one updates the app and keeps your data.
+
+**Signing:** builds use the standard React Native debug key unless the repo has `KEYSTORE_BASE64` and `KEYSTORE_PASSWORD` secrets (Settings > Secrets and variables > Actions). Add your private release key there before publishing to the Play Store. Switching keys means uninstalling once, so export a backup first.
+
+Alternative: `npx eas-cli@latest build -p android --profile preview` builds in Expo's cloud with a free expo.dev account.
 
 ## Notes
 
