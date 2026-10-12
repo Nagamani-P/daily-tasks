@@ -3,6 +3,8 @@ name: Build Android APK
 on:
   workflow_dispatch:
   push:
+    branches: [main]
+    paths-ignore: ['**.md']
     tags: ['v*']
 
 jobs:
@@ -32,12 +34,19 @@ jobs:
         env:
           CI: 1
 
-      - name: Use release signing key
+      # With KEYSTORE_BASE64 / KEYSTORE_PASSWORD secrets set, the APK is signed with
+      # your own release key (needed for Play Store). Without them it uses the
+      # standard React Native debug key, which is fine for installing on your own phone.
+      - name: Use release signing key (if configured)
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
         run: |
-          echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.jks"
-          python3 scripts/patch-signing.py
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.jks"
+            python3 scripts/patch-signing.py
+          else
+            echo "No release key secret; signing with the debug key."
+          fi
 
       - name: Build release APK
         working-directory: android
