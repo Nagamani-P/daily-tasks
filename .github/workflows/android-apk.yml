@@ -7,6 +7,9 @@ on:
     paths-ignore: ['**.md']
     tags: ['v*']
 
+permissions:
+  contents: write
+
 jobs:
   apk:
     runs-on: ubuntu-latest
@@ -66,3 +69,17 @@ jobs:
           name: DailyTasks-apk
           path: out/*.apk
           retention-days: 30
+
+      - name: Publish APK to the release page
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VER=$(node -p "require('./app.json').expo.version")
+          TAG="v$VER"
+          NOTES="Install on Android: open this page on your phone, tap the APK below, then allow 'Install unknown apps' for your browser if asked. Built from ${GITHUB_SHA::7}."
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" out/*.apk --clobber
+            gh release edit "$TAG" --notes "$NOTES"
+          else
+            gh release create "$TAG" out/*.apk --title "Daily Tasks $VER" --notes "$NOTES" --latest
+          fi
