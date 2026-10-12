@@ -1,23 +1,41 @@
 {
   "expo": {
-    "name": "daily-tasks",
+    "name": "Daily Tasks",
     "slug": "daily-tasks",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "backgroundColor": "#F5F2EC",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.nagamani.dailytasks"
     },
     "android": {
+      "package": "com.nagamani.dailytasks",
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#2E6B5A",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false
     },
+    "plugins": [
+      [
+        "expo-notifications",
+        { "icon": "./assets/android-icon-monochrome.png", "color": "#2E6B5A" }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 180,
+          "resizeMode": "contain",
+          "backgroundColor": "#2E6B5A"
+        }
+      ]
+    ],
     "web": {
       "favicon": "./assets/favicon.png"
     }
